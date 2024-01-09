@@ -14,8 +14,15 @@ Pin YAxisCounterClockPin(9);
 Pin modulateYAxisPin(6);
 Pin modulateXAxisPin(5);
 
-Joystick joystick(joystickTiltXPin, joystickTiltYPin, joystickPressPin);
-Plotter plotter(XAxisClockPin, XAxisCounterClockPin, YAxisClockPin, YAxisCounterClockPin, modulateYAxisPin, modulateXAxisPin);
+Joystick joystick(joystickTiltXPin,
+                  joystickTiltYPin,
+                  joystickPressPin);
+Plotter plotter(XAxisClockPin,
+                XAxisCounterClockPin,
+                YAxisClockPin,
+                YAxisCounterClockPin,
+                modulateYAxisPin,
+                modulateXAxisPin);
 
 bool joystickLastPressedState = false;
 
