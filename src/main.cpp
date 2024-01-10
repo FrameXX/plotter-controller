@@ -33,7 +33,7 @@ void toggleJoystickEnabled()
     plotter.stop();
 }
 
-void updateJoistickEnabledState()
+void updateJoystickEnabledState()
 {
   const bool joystickPressedState = joystick.getPressedState();
   if (joystickLastPressedState != joystickPressedState && joystickPressedState)
@@ -75,6 +75,6 @@ void setup()
 
 void loop()
 {
-  updateJoistickEnabledState();
+  updateJoystickEnabledState();
   controlPlotterMotors();
 }
