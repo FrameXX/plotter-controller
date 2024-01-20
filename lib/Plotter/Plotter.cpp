@@ -1,5 +1,4 @@
 #include <Plotter.h>
-#include <Pin.h>
 
 Plotter::Plotter(Pin XAxisClockPin,
                  Pin XAxisCounterClockPin,

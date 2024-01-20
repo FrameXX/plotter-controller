@@ -1,5 +1,5 @@
+#include <Pin.h>
 #include <Arduino.h>
-#include "Pin.h"
 
 Pin::Pin(uint8_t target) : target(target) {}
 
