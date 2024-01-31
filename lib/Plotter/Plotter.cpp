@@ -5,12 +5,16 @@ Plotter::Plotter(Pin XAxisClockPin,
                  Pin YAxisClockPin,
                  Pin YAxisCounterClockPin,
                  Pin modulateYAxisPin,
-                 Pin modulateXAxisPin) : XAxisClockPin(XAxisClockPin),
-                                         XAxisCounterClockPin(XAxisCounterClockPin),
-                                         YAxisClockPin(YAxisClockPin),
-                                         YAxisCounterClockPin(YAxisCounterClockPin),
-                                         modulateYAxisPin(modulateYAxisPin),
-                                         modulateXAxisPin(modulateXAxisPin)
+                 Pin modulateXAxisPin,
+                 int XDirectionChangeDelayMs,
+                 int YDirectionChangeDelayMs) : XAxisClockPin(XAxisClockPin),
+                                                XAxisCounterClockPin(XAxisCounterClockPin),
+                                                YAxisClockPin(YAxisClockPin),
+                                                YAxisCounterClockPin(YAxisCounterClockPin),
+                                                modulateYAxisPin(modulateYAxisPin),
+                                                modulateXAxisPin(modulateXAxisPin),
+                                                XDirectionChangeDelayMs(XDirectionChangeDelayMs),
+                                                YDirectionChangeDelayMs(YDirectionChangeDelayMs)
 {
   XAxisClockPin.useAsOutput();
   XAxisCounterClockPin.useAsOutput();
@@ -41,45 +45,85 @@ void Plotter::stopY()
 void Plotter::stopXClock()
 {
   this->XAxisClockPin.writeLow();
+  this->XAxisDirection = 0;
 }
 
 void Plotter::stopYClock()
 {
   this->YAxisClockPin.writeLow();
+  this->YAxisDirection = 0;
 }
 
 void Plotter::stopXCounterClock()
 {
   this->XAxisCounterClockPin.writeLow();
+  this->XAxisDirection = 0;
 }
 
 void Plotter::stopYCounterClock()
 {
   this->YAxisCounterClockPin.writeLow();
+  this->YAxisDirection = 0;
 }
 
 void Plotter::moveXClock()
 {
-  this->stopXCounterClock();
+  report("move x -");
+  const bool changingDirection = this->XAxisDirection == 1;
+  if (changingDirection)
+  {
+    report("X dir change");
+    this->stopXCounterClock();
+    delay(this->XDirectionChangeDelayMs);
+  }
+
   this->XAxisClockPin.writeHigh();
+  this->XAxisDirection = -1;
 }
 
 void Plotter::moveYClock()
 {
-  this->stopYCounterClock();
+  report("move y -");
+  const bool changingDirection = this->YAxisDirection == 1;
+  if (changingDirection)
+  {
+    report("Y dir change");
+    this->stopYCounterClock();
+    delay(this->YDirectionChangeDelayMs);
+  }
+
   this->YAxisClockPin.writeHigh();
+  this->YAxisDirection = -1;
 }
 
 void Plotter::moveXCounterClock()
 {
-  this->stopXClock();
+  report("move x +");
+  const bool changingDirection = this->XAxisDirection == -1;
+  if (changingDirection)
+  {
+    report("X dir change");
+    this->stopXClock();
+    delay(this->XDirectionChangeDelayMs);
+  }
+
   this->XAxisCounterClockPin.writeHigh();
+  this->XAxisDirection = 1;
 }
 
 void Plotter::moveYCounterClock()
 {
-  this->stopYClock();
+  report("move y +");
+  const bool changingDirection = this->YAxisDirection == -1;
+  if (changingDirection)
+  {
+    report("Y dir change");
+    this->stopYClock();
+    delay(this->YDirectionChangeDelayMs);
+  }
+
   this->YAxisCounterClockPin.writeHigh();
+  this->YAxisDirection = 1;
 }
 
 void Plotter::setXSpeed(float relativeValue)

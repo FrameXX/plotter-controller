@@ -2,13 +2,14 @@
 #include <Pin.h>
 #include <Joystick.h>
 #include <Plotter.h>
+#include <Report.h>
 
 Pin joystickTiltXPin(A0);
 Pin joystickTiltYPin(A1);
 Pin joystickPressPin(2);
 
-Pin XAxisClockPin(13);
-Pin XAxisCounterClockPin(12);
+Pin XAxisClockPin(12);
+Pin XAxisCounterClockPin(11);
 Pin YAxisClockPin(10);
 Pin YAxisCounterClockPin(9);
 Pin modulateYAxisPin(6);
@@ -71,6 +72,7 @@ void controlPlotterMotors()
 
 void setup()
 {
+  initSerial();
 }
 
 void loop()

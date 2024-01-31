@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Pin.h>
+#include <Report.h>
 
 class Plotter
 {
@@ -11,6 +12,15 @@ private:
   Pin YAxisCounterClockPin;
   Pin modulateYAxisPin;
   Pin modulateXAxisPin;
+  /*
+  0 - No
+  -1 - Clockwise
+  1 - Counterclockwise
+  */
+  char XAxisDirection = 0;
+  char YAxisDirection = 0;
+  int XDirectionChangeDelayMs = 50;
+  int YDirectionChangeDelayMs = 0;
 
 public:
   Plotter(Pin XAxisClockPin,
@@ -18,7 +28,9 @@ public:
           Pin YAxisClockPin,
           Pin YAxisCounterClockPin,
           Pin modulateYAxisPin,
-          Pin modulateXAxisPin);
+          Pin modulateXAxisPin,
+          int XDirectionChangeDelayMs = 50,
+          int YDirectionChangeDelayMs = 20);
 
   void stop();
 
