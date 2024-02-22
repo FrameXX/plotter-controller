@@ -2,6 +2,7 @@
 
 #include <Pin.h>
 #include <Report.h>
+#include <Amplify.h>
 
 class Plotter
 {
@@ -17,10 +18,14 @@ private:
   -1 - Clockwise
   1 - Counterclockwise
   */
-  char XAxisDirection = 0;
-  char YAxisDirection = 0;
-  int XDirectionChangeDelayMs = 50;
-  int YDirectionChangeDelayMs = 0;
+  int XAxisDirection = 0;
+  int YAxisDirection = 0;
+  int XDirectionChangeDelayMs;
+  int YDirectionChangeDelayMs;
+  int XModulationStart = 95;
+  int YModulationStart = 85;
+  int XModulationAmplifyExponent = 2;
+  int YModulationAmplifyExponent = 2;
 
 public:
   Plotter(Pin XAxisClockPin,
@@ -29,8 +34,12 @@ public:
           Pin YAxisCounterClockPin,
           Pin modulateYAxisPin,
           Pin modulateXAxisPin,
-          int XDirectionChangeDelayMs = 50,
-          int YDirectionChangeDelayMs = 20);
+          int XDirectionChangeDelayMs = 20,
+          int YDirectionChangeDelayMs = 100,
+          int XModulationStart = 95,
+          int YModulationStart = 85,
+          int XModulationAmplifyExponent = 2,
+          int YModulationAmplifyExponent = 2);
 
   void stop();
 
@@ -54,7 +63,7 @@ public:
 
   void moveYCounterClock();
 
-  void setXSpeed(float relativeValue);
+  void setXSpeed(int relativeValue);
 
-  void setYSpeed(float relativeValue);
+  void setYSpeed(int relativeValue);
 };

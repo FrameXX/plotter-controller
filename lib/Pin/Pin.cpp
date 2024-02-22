@@ -38,7 +38,7 @@ int Pin::readDigital()
   return digitalRead(this->target);
 }
 
-void Pin::modulate(float dutyFactor)
+void Pin::modulate(float dutyCycle)
 {
-  analogWrite(this->target, dutyFactor * 255);
+  analogWrite(this->target, dutyCycle);
 }

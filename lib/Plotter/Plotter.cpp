@@ -7,14 +7,21 @@ Plotter::Plotter(Pin XAxisClockPin,
                  Pin modulateYAxisPin,
                  Pin modulateXAxisPin,
                  int XDirectionChangeDelayMs,
-                 int YDirectionChangeDelayMs) : XAxisClockPin(XAxisClockPin),
-                                                XAxisCounterClockPin(XAxisCounterClockPin),
-                                                YAxisClockPin(YAxisClockPin),
-                                                YAxisCounterClockPin(YAxisCounterClockPin),
-                                                modulateYAxisPin(modulateYAxisPin),
-                                                modulateXAxisPin(modulateXAxisPin),
-                                                XDirectionChangeDelayMs(XDirectionChangeDelayMs),
-                                                YDirectionChangeDelayMs(YDirectionChangeDelayMs)
+                 int YDirectionChangeDelayMs,
+                 int XModulationStart,
+                 int YModulationStart,
+                 int XModulationAmplifyExponent,
+                 int YModulationAmplifyExponent) : XAxisClockPin(XAxisClockPin),
+                                                   XAxisCounterClockPin(XAxisCounterClockPin),
+                                                   YAxisClockPin(YAxisClockPin),
+                                                   YAxisCounterClockPin(YAxisCounterClockPin),
+                                                   modulateYAxisPin(modulateYAxisPin),
+                                                   modulateXAxisPin(modulateXAxisPin),
+                                                   XDirectionChangeDelayMs(XDirectionChangeDelayMs),
+                                                   YDirectionChangeDelayMs(YDirectionChangeDelayMs),
+                                                   XModulationStart(XModulationStart), YModulationStart(YModulationStart),
+                                                   XModulationAmplifyExponent(XModulationAmplifyExponent),
+                                                   YModulationAmplifyExponent(YModulationAmplifyExponent)
 {
   XAxisClockPin.useAsOutput();
   XAxisCounterClockPin.useAsOutput();
@@ -45,25 +52,21 @@ void Plotter::stopY()
 void Plotter::stopXClock()
 {
   this->XAxisClockPin.writeLow();
-  this->XAxisDirection = 0;
 }
 
 void Plotter::stopYClock()
 {
   this->YAxisClockPin.writeLow();
-  this->YAxisDirection = 0;
 }
 
 void Plotter::stopXCounterClock()
 {
   this->XAxisCounterClockPin.writeLow();
-  this->XAxisDirection = 0;
 }
 
 void Plotter::stopYCounterClock()
 {
   this->YAxisCounterClockPin.writeLow();
-  this->YAxisDirection = 0;
 }
 
 void Plotter::moveXClock()
@@ -126,12 +129,18 @@ void Plotter::moveYCounterClock()
   this->YAxisDirection = 1;
 }
 
-void Plotter::setXSpeed(float relativeValue)
+void Plotter::setXSpeed(int dutyCycle)
 {
-  this->modulateXAxisPin.modulate(relativeValue);
+  const int amplified = amplify(dutyCycle, 0, 255, this->XModulationAmplifyExponent);
+  const int mapped = map(amplified, 0, 255, this->XModulationStart, 255);
+  // reportValue(mapped, "X mod");
+  this->modulateXAxisPin.modulate(amplified);
 }
 
-void Plotter::setYSpeed(float relativeValue)
+void Plotter::setYSpeed(int dutyCycle)
 {
-  this->modulateYAxisPin.modulate(relativeValue);
+  const int amplified = amplify(dutyCycle, 0, 255, this->YModulationAmplifyExponent);
+  const int mapped = map(amplified, 0, 255, this->YModulationStart, 255);
+  // reportValue(mapped, "Y mod");
+  this->modulateYAxisPin.modulate(amplified);
 }

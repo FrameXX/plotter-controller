@@ -47,6 +47,9 @@ void controlPlotterMotors()
   const float tiltX = joystick.getTiltX();
   const float tiltY = joystick.getTiltY();
 
+  // reportValue(tiltX, "tilt X");
+  // reportValue(tiltY, "tilt Y");
+
   if (tiltX < 0)
     plotter.moveXClock();
 
@@ -56,7 +59,7 @@ void controlPlotterMotors()
   if (tiltX == 0)
     plotter.stopX();
 
-  plotter.setXSpeed(abs(tiltX));
+  plotter.setXSpeed(static_cast<int>(abs(tiltX) * 255));
 
   if (tiltY < 0)
     plotter.moveYClock();
@@ -67,16 +70,18 @@ void controlPlotterMotors()
   if (tiltY == 0)
     plotter.stopY();
 
-  plotter.setYSpeed(abs(tiltY));
+  plotter.setYSpeed(static_cast<int>(abs(tiltY) * 255));
 }
 
 void setup()
 {
   initSerial();
+  report("serial initiated");
 }
 
 void loop()
 {
+  delay(100);
   updateJoystickEnabledState();
   controlPlotterMotors();
 }
